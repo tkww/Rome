@@ -22,10 +22,10 @@ jobs:
         token: ${{ secrets.TKWW_GITHUB_TOKEN }}
         path: .github/tkww-actions
     - uses: haskell/actions/setup@v1
-        with:
-          ghc-version: '8.8.3'
-          enable-stack: true
-          stack-version: 'latest'
+      with:
+        ghc-version: '8.8.3'
+        enable-stack: true
+        stack-version: 'latest'
     - uses: ./.github/tkww-actions/packages/update-brew-formula
       with:
         formula-name: rome
