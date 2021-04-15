@@ -1,0 +1,57 @@
+name: Update Formula
+
+on:
+  push:
+   tags:
+     - '*'
+
+jobs:
+  release:
+    strategy:
+      matrix:
+        os: [macos-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Checkout tkww actions
+      uses: actions/checkout@v2
+      with:
+        repository: tkww/actions
+        ref: main
+        token: ${{ secrets.TKWW_GITHUB_TOKEN }}
+        path: .github/tkww-actions
+    - uses: ./.github/tkww-actions/packages/update-homebrew-formula
+      env:
+        GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
+        GITHUB_USER: ${{ secrets.HOMEBREW_GITHUB_USER }}
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: ${{ steps.update_formula.outputs.bottle }} 
+        asset_name: ${{ steps.update_formula.outputs.bottle_name }} 
+        asset_content_type: application/gzip
+    - name: Open Pull Request
+      id: open_pull_request
+      run: |
+        VERSION=${GITHUB_REF/refs\/tags\//}
+        cd /usr/local/Homebrew/Library/Taps/tkww/homebrew-tap
+        curl -u $GITHUB_USER:$GITHUB_TOKEN -d '{"title": "Update rome to '"$VERSION"'", "base": "main", "head": "formula/rome/'"$VERSION"'"}' https://api.github.com/repos/tkww/homebrew-tap/pulls
+      env:
+        GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
+        GITHUB_USER: ${{ secrets.HOMEBREW_GITHUB_USER }}
+        
