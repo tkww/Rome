@@ -19,7 +19,7 @@ jobs:
       with:
         repository: tkww/actions
         ref: main
-        token: ${{ secrets.TKWW_GITHUB_TOKEN }}
+        token: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
         path: .github/tkww-actions
     - uses: haskell/actions/setup@v1
       with:
@@ -36,7 +36,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
@@ -46,7 +46,7 @@ jobs:
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: ${{ steps.update_formula.outputs.bottle }} 
