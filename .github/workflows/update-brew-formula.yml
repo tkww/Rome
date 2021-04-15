@@ -21,7 +21,9 @@ jobs:
         ref: main
         token: ${{ secrets.TKWW_GITHUB_TOKEN }}
         path: .github/tkww-actions
-    - uses: ./.github/tkww-actions/packages/update-homebrew-formula
+    - uses: ./.github/tkww-actions/packages/update-brew-formula
+      with:
+        formula-name: rome
       env:
         GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
         GITHUB_USER: ${{ secrets.HOMEBREW_GITHUB_USER }}
