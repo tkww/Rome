@@ -26,12 +26,11 @@ jobs:
         ghc-version: '8.8.3'
         enable-stack: true
         stack-version: 'latest'
-    - uses: ./.github/tkww-actions/packages/update-brew-formula
-      with:
-        formula-name: rome
-      env:
-        GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
-        GITHUB_USER: ${{ secrets.HOMEBREW_GITHUB_USER }}
+    - id: build
+      run: |
+        stack build
+        BIN_PATH=$(stack --stack-yaml stack.yaml path --local-install-root)
+        zip Rome.zip $BIN_PATH/bin/rome
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -49,9 +48,17 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
-        asset_path: ${{ steps.update_formula.outputs.bottle }} 
-        asset_name: ${{ steps.update_formula.outputs.bottle_name }} 
-        asset_content_type: application/gzip
+        asset_path: ./Rome.zip
+        asset_name: Rome 
+        asset_content_type: application/zip
+    - uses: ./.github/tkww-actions/packages/update-brew-formula
+      id: update_formula
+      with:
+        formula-name: rome
+        artifact-url: ${{ steps.upload-release-asset.outputs.browser_download_url }} 
+      env:
+        GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
+        GITHUB_USER: ${{ secrets.HOMEBREW_GITHUB_USER }}
     - name: Open Pull Request
       id: open_pull_request
       run: |
