@@ -57,7 +57,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: ./Rome.zip
-        asset_name: Rome 
+        asset_name: Rome.zip
         asset_content_type: application/zip
     - uses: ./.github/tkww-actions/packages/update-brew-formula
       id: update_formula
