@@ -7,7 +7,6 @@ class Rome < Formula
   bottle :unneeded
 
   def install
-    system "stack build"
     bin.install "rome"
   end
 
