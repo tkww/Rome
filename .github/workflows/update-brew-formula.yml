@@ -67,6 +67,16 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
         GITHUB_USER: ${{ secrets.HOMEBREW_GITHUB_USER }}
+    - name: Upload Release Asset
+      id: upload-brew-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: ${{ steps.update_formula.outputs.bottle }} 
+        asset_name: ${{ steps.update_formula.outputs.bottle_name }} 
+        asset_content_type: application/gzip
     - name: Open Pull Request
       id: open_pull_request
       run: |
