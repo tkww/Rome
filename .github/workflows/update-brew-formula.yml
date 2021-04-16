@@ -38,7 +38,7 @@ jobs:
       run: |
         stack build
         BIN_PATH=$(stack --stack-yaml stack.yaml path --local-install-root)
-        zip Rome.zip $BIN_PATH/bin/rome
+        zip -j Rome.zip $BIN_PATH/bin/rome
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
