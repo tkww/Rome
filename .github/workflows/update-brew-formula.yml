@@ -23,10 +23,9 @@ jobs:
         path: .github/tkww-actions
     - name: Cache
       id: cache
-      uses: gerbal/always-cache@v1.0.3
+      uses: actions/cache@v2
       with:
         path: |
-          ~/.stack
           ./.stack-work
         key: ${{ runner.os }}-cache
     - uses: haskell/actions/setup@v1
