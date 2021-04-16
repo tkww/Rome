@@ -23,7 +23,7 @@ jobs:
         path: .github/tkww-actions
     - name: Cache
       id: cache
-      uses: actions/cache@v2
+      uses: gerbal/always-cache@v1.0.3
       with:
         path: |
           ~/.stack
@@ -71,7 +71,7 @@ jobs:
       id: upload-brew-release-asset 
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.HOMEBREW_GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: ${{ steps.update_formula.outputs.bottle }} 
