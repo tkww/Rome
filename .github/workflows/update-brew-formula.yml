@@ -74,7 +74,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: ${{ steps.update_formula.outputs.bottle }} 
-        asset_name: ${{ steps.update_formula.outputs.bottle_name }} 
+        asset_name: ${{ steps.update_formula.outputs.bottle-name }} 
         asset_content_type: application/gzip
     - name: Open Pull Request
       id: open_pull_request
